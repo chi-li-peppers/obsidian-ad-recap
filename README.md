@@ -1,5 +1,10 @@
 # Ad Recap
 
+[![Release](https://img.shields.io/github/v/release/chi-li-peppers/obsidian-ad-recap?style=flat-square)](https://github.com/chi-li-peppers/obsidian-ad-recap/releases/latest)
+[![CI](https://img.shields.io/github/actions/workflow/status/chi-li-peppers/obsidian-ad-recap/ci.yml?branch=main&style=flat-square&label=tests)](https://github.com/chi-li-peppers/obsidian-ad-recap/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+![Platforms](https://img.shields.io/badge/platforms-desktop%20%7C%20mobile-8a5cf6?style=flat-square)
+
 Your Google Ads and Meta Ads numbers, right inside Obsidian.
 
 Ad Recap pulls campaign metrics into your notes as clean Markdown tables: spend, impressions, clicks, CTR, CPC, conversions, CPA and ROAS, with changes against the previous period. Open today's daily note and yesterday's results are already there.
@@ -82,6 +87,23 @@ Then fill in the customer ID(s), the manager account ID if you use one, the deve
 
 Search for **Ad Recap** in **Settings → Community plugins**, or install manually: copy `main.js`, `manifest.json` and `styles.css` from the [latest release](../../releases/latest) to `<vault>/.obsidian/plugins/ad-recap/` and enable the plugin.
 
+## Roadmap
+
+- [ ] More platforms: Microsoft Ads, TikTok Ads, LinkedIn Ads
+- [ ] Breakdown by ad group / ad set
+- [ ] Weekly and monthly notes support
+- [ ] Budget pacing alerts
+
+Ideas and votes are welcome in [issues](https://github.com/chi-li-peppers/obsidian-ad-recap/issues).
+
+## Contributing
+
+Bug reports, ideas and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). For security issues, see [SECURITY.md](SECURITY.md).
+
+## Disclaimer
+
+Ad Recap is an independent project and is not affiliated with or endorsed by Google, Meta or Obsidian. Google Ads is a trademark of Google LLC. Meta is a trademark of Meta Platforms, Inc.
+
 ## License
 
-MIT
+[MIT](LICENSE) © 2026 David ([chi-li-peppers](https://github.com/chi-li-peppers))

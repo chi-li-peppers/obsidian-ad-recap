@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest an idea for Ad Recap
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe how you work with your ad reports today and what's missing.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to see?
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Examples, screenshots or other tools that do this well.

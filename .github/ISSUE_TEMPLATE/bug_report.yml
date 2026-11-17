@@ -1,0 +1,48 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! Please never paste access tokens, developer tokens or account IDs.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Ad platform
+      options: [Google Ads (API), Google Ads (Sheet), Meta Ads, Demo mode, Not related to a platform]
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error message
+      description: Copy the exact message from the notice or the live block.
+      render: text
+  - type: input
+    id: obsidian
+    attributes:
+      label: Obsidian version
+      placeholder: "1.10.3"
+    validations:
+      required: true
+  - type: input
+    id: plugin
+    attributes:
+      label: Ad Recap version
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Device
+      options: [macOS, Windows, Linux, iOS / iPadOS, Android]
+    validations:
+      required: true
