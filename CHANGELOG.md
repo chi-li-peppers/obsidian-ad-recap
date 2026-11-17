@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.0.2] - 2026-11-18
+
+### Added
+
+- Release assets now come with GitHub artifact attestations. Verify them with `gh attestation verify main.js --repo chi-li-peppers/obsidian-ad-recap`.
+
 ## [1.0.1] - 2026-11-17
 
 ### Fixed
@@ -28,5 +34,6 @@ All notable changes to this project are documented here. The format follows [Kee
 - Demo mode with sample data
 - Desktop and mobile support
 
+[1.0.2]: https://github.com/chi-li-peppers/obsidian-ad-recap/releases/tag/1.0.2
 [1.0.1]: https://github.com/chi-li-peppers/obsidian-ad-recap/releases/tag/1.0.1
 [1.0.0]: https://github.com/chi-li-peppers/obsidian-ad-recap/releases/tag/1.0.0
