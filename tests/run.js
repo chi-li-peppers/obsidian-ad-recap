@@ -141,3 +141,34 @@ console.log("sections ok");
   assert.ok(rep2.markdown.includes("Other (2)"));
   console.log("all tests passed");
 })().catch((e) => { console.error(e); process.exit(1); });
+
+// --- 1.0.1 regressions
+(async () => {
+  await new Promise((r) => setTimeout(r, 50));
+  // demo label
+  const range = I.resolveRange("yesterday", new Date(2026, 10, 17));
+  const rows = await new I.DemoSource("Meta Ads", 2).fetch(range);
+  const demoRep = I.buildReport([{ name: "Meta Ads", rows }], range, { currency: "$", demoMode: true });
+  assert.ok(demoRep.markdown.includes("[!info] Demo data"));
+  const realRep = I.buildReport([{ name: "Meta Ads", rows }], range, { currency: "$", demoMode: false });
+  assert.ok(!realRep.markdown.includes("Demo data"));
+  // toBool
+  assert.strictEqual(I.toBool("false", true), false);
+  assert.strictEqual(I.toBool("true", false), true);
+  assert.strictEqual(I.toBool(undefined, true), true);
+  // testSource: no API call in demo mode, single run per click burst
+  let fetches = 0;
+  const plugin = new P();
+  plugin.meta = { name: "Meta Ads", fetch: async () => { fetches++; await new Promise((r) => setTimeout(r, 30)); return []; } };
+  plugin.google = plugin.meta;
+  plugin.testing = false;
+  plugin.settings = { demoMode: true };
+  await plugin.testSource("meta");
+  assert.strictEqual(fetches, 0, "demo mode must not call the API");
+  plugin.settings = { demoMode: false };
+  const btn = { disabled: false, setDisabled(v) { this.disabled = v; } };
+  await Promise.all([plugin.testSource("meta", btn), plugin.testSource("meta", btn), plugin.testSource("meta", btn)]);
+  assert.strictEqual(fetches, 1, "three rapid clicks must run one test");
+  assert.strictEqual(btn.disabled, false);
+  console.log("1.0.1 regressions ok");
+})().catch((e) => { console.error(e); process.exit(1); });

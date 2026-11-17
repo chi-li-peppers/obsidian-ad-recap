@@ -531,6 +531,11 @@ function buildReport(results, range, settings) {
     parts.push(`CPA ${f.money(tot.cpa)}${prev ? delta(tot.cpa, prev.cpa) : ""}${cpaFlag(tot.cpa, target)}`);
   }
   if (tot.roas !== null) parts.push(`ROAS ${f.ratio(tot.roas)}`);
+  if (settings.demoMode) {
+    out.push("> [!info] Demo data");
+    out.push("> These numbers are generated samples. Turn off demo mode in Ad Recap settings to see your accounts.");
+    out.push("");
+  }
   out.push(`*${range.label}*  `);
   out.push(parts.join(" · "));
   out.push("");
@@ -596,6 +601,8 @@ class AdRecapPlugin extends Plugin {
     this.google = new GoogleAdsSource(this);
     this.meta = new MetaAdsSource(this);
     this.cache = new Map();
+    this.blocks = new Set();
+    this.testing = false;
 
     this.addCommand({
       id: "insert-report-yesterday",
@@ -652,10 +659,16 @@ class AdRecapPlugin extends Plugin {
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    // Guard against hand-edited data.json with "true"/"false" strings.
+    for (const [k, v] of Object.entries(DEFAULT_SETTINGS)) {
+      if (typeof v === "boolean") this.settings[k] = toBool(this.settings[k], v);
+    }
   }
   async saveSettings() {
     await this.saveData(this.settings);
     this.cache.clear();
+    // Redraw open live blocks so they never show data from the old settings.
+    for (const redraw of this.blocks) redraw(true);
   }
 
   sources(filter) {
@@ -680,7 +693,7 @@ class AdRecapPlugin extends Plugin {
     }
     const compare = opts.compare ?? this.settings.compare;
     const prev = compare ? previousRange(range) : null;
-    const key = JSON.stringify([range.since, range.until, opts.source || "all", !!compare]);
+    const key = JSON.stringify([range.since, range.until, opts.source || "all", !!compare, !!this.settings.demoMode]);
     const hit = this.cache.get(key);
     if (hit && !opts.force && Date.now() - hit.at < 10 * 60 * 1000) return hit.value;
 
@@ -797,13 +810,22 @@ class AdRecapPlugin extends Plugin {
         body.createDiv({ cls: "ad-recap-error", text: e.message || String(e) });
       }
     };
+    this.blocks.add(draw);
+    child.onunload = () => this.blocks.delete(draw);
     draw(false);
   }
 
   /* ---------- Connection test ---------- */
 
-  async testSource(which) {
+  async testSource(which, button) {
     const src = which === "google" ? this.google : this.meta;
+    if (this.settings.demoMode) {
+      new Notice(`Ad Recap: demo mode is on. Turn it off to test your real ${src.name} account.`, 8000);
+      return;
+    }
+    if (this.testing) return;
+    this.testing = true;
+    if (button) button.setDisabled(true);
     const notice = new Notice(`Ad Recap: testing ${src.name}…`, 0);
     try {
       const rows = await src.fetch(resolveRange("last_7d"));
@@ -812,8 +834,17 @@ class AdRecapPlugin extends Plugin {
       new Notice(e.message || String(e), 10000);
     } finally {
       notice.hide();
+      this.testing = false;
+      if (button) button.setDisabled(false);
     }
   }
+}
+
+function toBool(v, fallback) {
+  if (typeof v === "boolean") return v;
+  if (v === "true" || v === 1 || v === "1") return true;
+  if (v === "false" || v === 0 || v === "0") return false;
+  return fallback;
 }
 
 function round2(v) {
@@ -897,8 +928,14 @@ class AdRecapSettingTab extends PluginSettingTab {
     /* General */
     new Setting(containerEl)
       .setName("Demo mode")
-      .setDesc("Show sample data instead of real accounts. Handy to try the plugin before connecting anything.")
-      .addToggle((t) => t.setValue(s.demoMode).onChange(async (v) => ((s.demoMode = v), await save())));
+      .setDesc("On: reports show generated sample data and are labelled “Demo data”. Off: reports use the accounts connected below.")
+      .addToggle((t) =>
+        t.setValue(s.demoMode === true).onChange(async (v) => {
+          s.demoMode = v === true;
+          await save();
+          new Notice(`Ad Recap: demo mode ${s.demoMode ? "on, showing sample data" : "off, using your accounts"}`);
+        })
+      );
 
     text(new Setting(containerEl).setName("Currency").setDesc("Symbol or code shown next to money values, e.g. $, €, ₾ or GEL."), "currency", "$");
 
@@ -989,7 +1026,7 @@ class AdRecapSettingTab extends PluginSettingTab {
         text(new Setting(containerEl).setName("Refresh token"), "googleRefreshToken", "", true);
         text(new Setting(containerEl).setName("API version"), "googleApiVersion", "v26");
       }
-      new Setting(containerEl).addButton((b) => b.setButtonText("Test Google Ads").onClick(() => this.plugin.testSource("google")));
+      new Setting(containerEl).addButton((b) => b.setButtonText("Test Google Ads").onClick(() => this.plugin.testSource("google", b)));
     }
 
     /* Meta */
@@ -1016,7 +1053,7 @@ class AdRecapSettingTab extends PluginSettingTab {
         "purchase, lead"
       );
       text(new Setting(containerEl).setName("API version"), "metaApiVersion", "v26.0");
-      new Setting(containerEl).addButton((b) => b.setButtonText("Test Meta Ads").onClick(() => this.plugin.testSource("meta")));
+      new Setting(containerEl).addButton((b) => b.setButtonText("Test Meta Ads").onClick(() => this.plugin.testSource("meta", b)));
     }
 
     containerEl.createEl("p", {
@@ -1029,4 +1066,4 @@ class AdRecapSettingTab extends PluginSettingTab {
 module.exports = AdRecapPlugin;
 module.exports.default = AdRecapPlugin;
 // Exposed for tests.
-module.exports._internals = { resolveRange, previousRange, buildReport, parseCsv, replaceSection, GoogleAdsSource, MetaAdsSource, DemoSource, groupByCampaign, sumActions };
+module.exports._internals = { toBool, resolveRange, previousRange, buildReport, parseCsv, replaceSection, GoogleAdsSource, MetaAdsSource, DemoSource, groupByCampaign, sumActions };
