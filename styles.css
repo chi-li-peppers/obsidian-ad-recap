@@ -1,0 +1,37 @@
+.ad-recap-block {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  padding: var(--size-4-2) var(--size-4-3) var(--size-4-1);
+  background: var(--background-primary-alt);
+}
+.ad-recap-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-4-2);
+  margin-bottom: var(--size-4-1);
+}
+.ad-recap-title {
+  font-size: var(--font-ui-small);
+  font-weight: var(--font-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ad-recap-refresh {
+  font-size: var(--font-ui-smaller);
+}
+.ad-recap-loading {
+  color: var(--text-faint);
+  padding: var(--size-4-2) 0;
+}
+.ad-recap-error {
+  color: var(--text-error);
+  padding: var(--size-4-2) 0;
+}
+.ad-recap-body table {
+  font-size: var(--font-ui-small);
+}
+.is-phone .ad-recap-body {
+  overflow-x: auto;
+}

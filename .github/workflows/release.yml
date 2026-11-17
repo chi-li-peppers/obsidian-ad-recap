@@ -1,0 +1,23 @@
+name: Release
+on:
+  push:
+    branches: [main]
+    paths: ["manifest.json", "main.js", "styles.css", ".github/workflows/release.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Release the version from manifest.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(jq -r .version manifest.json)
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            gh release upload "$VERSION" main.js manifest.json styles.css --clobber
+          else
+            gh release create "$VERSION" main.js manifest.json styles.css --title "$VERSION" --target "$GITHUB_SHA" --generate-notes
+          fi

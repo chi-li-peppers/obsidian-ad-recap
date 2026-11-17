@@ -1,0 +1,10 @@
+{
+  "id": "ad-recap",
+  "name": "Ad Recap",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.10",
+  "description": "Pull Google Ads and Meta Ads campaign metrics into your notes: spend, clicks, conversions, CPA and ROAS, with daily note automation.",
+  "author": "David",
+  "authorUrl": "https://github.com/chi-li-peppers",
+  "isDesktopOnly": false
+}
