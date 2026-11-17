@@ -9,7 +9,7 @@ Your Google Ads and Meta Ads numbers, right inside Obsidian.
 
 Ad Recap pulls campaign metrics into your notes as clean Markdown tables: spend, impressions, clicks, CTR, CPC, conversions, CPA and ROAS, with changes against the previous period. Open today's daily note and yesterday's results are already there.
 
-![Ad Recap report in a daily note](screenshot.png)
+![Yesterday's ad results in your daily note](docs/shot-1.png)
 
 ## Features
 
@@ -22,6 +22,13 @@ Ad Recap pulls campaign metrics into your notes as clean Markdown tables: spend,
 - **Period comparison**: ▲/▼ against the period of the same length just before
 - **Works on mobile**: all requests go through Obsidian's own network API
 - **Demo mode** to try everything before connecting an account
+
+## Screenshots
+
+| | |
+| --- | --- |
+| ![Live report block](docs/shot-2.png) | ![Mobile](docs/shot-3.png) |
+| ![Settings](docs/shot-4.png) | ![Daily note](screenshot.png) |
 
 ## Commands
 
