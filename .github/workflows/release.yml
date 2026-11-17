@@ -1,3 +1,4 @@
+# Publishes main.js, manifest.json and styles.css as a GitHub release for the version in manifest.json.
 name: Release
 on:
   push:
