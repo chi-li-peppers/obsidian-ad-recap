@@ -1,5 +1,7 @@
 # Ad Recap
 
+> ⭐ If Ad Recap saves you time, a star helps other marketers find it. Found a bug or have an idea? [Open an issue](https://github.com/chi-li-peppers/obsidian-ad-recap/issues), I read every one.
+
 [![Release](https://img.shields.io/github/v/release/chi-li-peppers/obsidian-ad-recap?style=flat-square)](https://github.com/chi-li-peppers/obsidian-ad-recap/releases/latest)
 [![CI](https://img.shields.io/github/actions/workflow/status/chi-li-peppers/obsidian-ad-recap/ci.yml?branch=main&style=flat-square&label=tests)](https://github.com/chi-li-peppers/obsidian-ad-recap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
@@ -114,3 +116,5 @@ Ad Recap is an independent project and is not affiliated with or endorsed by Goo
 ## License
 
 [MIT](LICENSE) © 2026 David ([chi-li-peppers](https://github.com/chi-li-peppers))
+
+⭐ Like it? [Star the repo](https://github.com/chi-li-peppers/obsidian-ad-recap) · Ideas and bugs: [issues](https://github.com/chi-li-peppers/obsidian-ad-recap/issues)

@@ -915,6 +915,13 @@ class AdRecapSettingTab extends PluginSettingTab {
     const save = async () => this.plugin.saveSettings();
     containerEl.empty();
 
+    const intro = containerEl.createDiv({ cls: "setting-item-description ad-recap-intro" });
+    intro.appendText("⭐ Enjoying Ad Recap? A star on ");
+    intro.createEl("a", { text: "GitHub", href: "https://github.com/chi-li-peppers/obsidian-ad-recap" });
+    intro.appendText(" helps other people find it. Found a bug or have an idea? ");
+    intro.createEl("a", { text: "Open an issue", href: "https://github.com/chi-li-peppers/obsidian-ad-recap/issues" });
+    intro.appendText(".");
+
     const text = (setting, key, placeholder, secret) =>
       setting.addText((t) => {
         t.setPlaceholder(placeholder || "").setValue(String(s[key] ?? ""));
