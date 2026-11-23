@@ -17,10 +17,10 @@ Ad Recap pulls campaign metrics into your notes as clean Markdown tables: spend,
 
 - **Google Ads** via the official API, or **without a developer token** through a small Google Ads script that fills a Google Sheet
 - **Meta Ads** (Facebook and Instagram) via the Marketing API, with your own choice of conversion actions
-- **Daily note automation**: when today's note is created, yesterday's report is added under a heading you choose
-- **Note properties**: `ads_spend`, `ads_clicks`, `ads_conversions`, `ads_cpa`, `ads_roas` are saved to the daily note, so you can chart trends with Bases or Dataview
-- **Live block**: put an `ad-recap` code block in any note for a report that refreshes on open
-- **Target CPA** flags: 🟢 at or under target, 🔴 above
+- **Daily note automation**: when today's note is created, yesterday's report is added under a heading you choose (works with core Daily notes and Periodic Notes)
+- **Note properties**: `ads_spend`, `ads_impressions`, `ads_clicks`, `ads_conversions`, `ads_value`, `ads_cpa`, `ads_roas`, `ads_google_spend` and `ads_meta_spend` are saved to the daily note, so you can chart trends with Bases or Dataview
+- **Live block**: put an `ad-recap` code block in any note for a report that refreshes on open, with per-block account, campaign filter, sorting and currency overrides
+- **Target CPA** flags: 🟢 at or under target, 🔴 above (or spending over target with 0 conversions)
 - **Period comparison**: ▲/▼ against the period of the same length just before
 - **Works on mobile**: all requests go through Obsidian's own network API
 - **Demo mode** to try everything before connecting an account
@@ -55,8 +55,14 @@ compare: true
 - `range`: `today`, `yesterday`, `last_7d`, `last_14d`, `last_30d` (any `last_Nd`), `this_month`, `last_month`, a date like `2026-11-16`, or `2026-11-01..2026-11-15`
 - `source`: `all`, `google` or `meta`
 - `compare`: `true` or `false`
+- `account`: optional account ID(s), comma separated (useful when tracking separate clients in different notes)
+- `filter`: optional case-insensitive substring filter on campaign name
+- `sort`: `spend` (default), `cpa`, `roas`, `conversions`, `clicks`, `impressions`, `ctr` or `cpc`
+- `currency`: optional currency symbol/code override for this block
+- `target_cpa`: optional Target CPA override for this block
+- `limit`: optional maximum campaigns per table override for this block
 
-Results are cached for 10 minutes. Use the **Refresh** button for fresh numbers.
+Results are cached for 10 minutes. Use the **Refresh** button for fresh numbers, or **Copy** to copy the Markdown table.
 
 ## Connecting Google Ads
 
@@ -90,7 +96,7 @@ Then fill in the customer ID(s), the manager account ID if you use one, the deve
 ## Privacy
 
 - Ad Recap talks only to `googleads.googleapis.com`, `oauth2.googleapis.com`, `graph.facebook.com` and the Google Sheet link you provide. Nothing is sent anywhere else.
-- Tokens are stored in this vault's plugin data file (`.obsidian/plugins/ad-recap/data.json`). If your vault is synced or shared, the tokens go with it.
+- On Obsidian 1.11.4+, API tokens can be stored in Obsidian's built-in **Secret Storage** so they stay out of `data.json` and are not synced with your vault files. On older versions, tokens fall back to `.obsidian/plugins/ad-recap/data.json` (if your vault is synced or shared, those tokens go with it).
 
 ## Install
 

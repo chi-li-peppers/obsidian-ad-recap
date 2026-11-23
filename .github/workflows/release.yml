@@ -1,5 +1,5 @@
 # Publishes main.js, manifest.json and styles.css as a GitHub release for the version in manifest.json,
-# with GitHub artifact attestations so users can verify the files were built from this repository.
+# after passing CI checks, with GitHub artifact attestations so users can verify the files were built from this repository.
 name: Release
 on:
   push:
@@ -15,20 +15,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify before release
+        run: |
+          node --check main.js && node --check scripts/google-ads-to-sheet.js
+          jq -e '.id and .name and .version and .minAppVersion and .description and .author' manifest.json
+          V=$(jq -r .version manifest.json)
+          jq -e --arg v "$V" 'has($v)' versions.json
+          node tests/run.js
+      - name: Check if release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(jq -r .version manifest.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Attest release assets
+        if: steps.check.outputs.exists == 'false'
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
             main.js
             manifest.json
             styles.css
-      - name: Release the version from manifest.json
+      - name: Publish new release
+        if: steps.check.outputs.exists == 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=$(jq -r .version manifest.json)
-          if gh release view "$VERSION" >/dev/null 2>&1; then
-            gh release upload "$VERSION" main.js manifest.json styles.css --clobber
-          else
-            gh release create "$VERSION" main.js manifest.json styles.css --title "$VERSION" --target "$GITHUB_SHA" --generate-notes
-          fi
+          VERSION="${{ steps.check.outputs.version }}"
+          gh release create "$VERSION" main.js manifest.json styles.css --title "$VERSION" --target "$GITHUB_SHA" --generate-notes
