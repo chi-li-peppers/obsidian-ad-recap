@@ -119,6 +119,13 @@ Bug reports, ideas and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBU
 
 Ad Recap is an independent project and is not affiliated with or endorsed by Google, Meta or Obsidian. Google Ads is a trademark of Google LLC. Meta is a trademark of Meta Platforms, Inc.
 
+## More Obsidian plugins & themes
+
+- **[Traffic Recap](https://github.com/chi-li-peppers/obsidian-traffic-recap)** — GA4, Search Console, Plausible & PostHog metrics in your notes
+- **[UTM Vault](https://github.com/chi-li-peppers/obsidian-utm-vault)** — build, validate and audit UTM tracking links
+- **[Bases Conditional Format](https://github.com/chi-li-peppers/obsidian-bases-conditional-format)** — colour badges, row highlights and progress bars for Obsidian Bases
+- **[Chili](https://github.com/chi-li-peppers/obsidian-chili)** & **[Popcorn](https://github.com/chi-li-peppers/obsidian-popcorn)** — Obsidian themes
+
 ## License
 
 [MIT](LICENSE) © 2026 David ([chi-li-peppers](https://github.com/chi-li-peppers))
